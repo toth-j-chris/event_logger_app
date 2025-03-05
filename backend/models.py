@@ -14,7 +14,7 @@ Classes:
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 # User model represents the application's users.
@@ -24,7 +24,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(*String, unique=True, index=True)
+    username = Column(String, unique=True, index=True)
     password_hash = Column(String)
 
     # One-to-many relationship: A user can have multiple events.
@@ -53,6 +53,6 @@ class EventOccurrence(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     event_id = Column(Integer, ForeignKey("events.id"))
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     event = relationship("Event", back_populates="occurrences")
