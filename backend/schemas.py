@@ -1,3 +1,18 @@
+"""
+schemas.py
+
+This module defines the Pydantic schemas for the Event Logger App. These schemas are used
+to validate incoming API requests and format outgoing responses. They also enable automatic
+serialization of ORM objects via Pydantic's configuration.
+
+Schemas:
+    UserCreate: Schema for creating a new user.
+    UserResponse: Schema for returning user data.
+    EventCreate: Schema for creating a new event.
+    EventRespone: Schema for returning event data.
+    EventOccurrenceCreate: Schema for creating a new event occurrence.
+    EventOccurrenceResponse: Schema for returning event occurrence data.
+"""
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
