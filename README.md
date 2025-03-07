@@ -15,5 +15,5 @@ For in-memory MySQL db, use this in .env:
 DATABASE_URL=sqlite+aiosqlite:///:memory:
 
 Run initial db migration:
-alembic revision --autogenerate -m "Initial migration"
+alembic revision --autogenerate -m "initial migration"
 alembic upgrade head
