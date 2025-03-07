@@ -11,10 +11,16 @@ Classes:
     EventOccurrence: Logs an occurrence of an event with a timestamp.
 """
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import ForeignKey
+from sqlalchemy import func
+from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import mapped_column
+
+from datetime import datetime
+from typing import List
+
 from database import Base
-from datetime import datetime, timezone
 
 
 # User model represents the application's users.
@@ -23,12 +29,14 @@ class User(Base):
 
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    password_hash = Column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str]
+    password_hash: Mapped[str]
 
     # One-to-many relationship: A user can have multiple events.
-    events = relationship("Event", back_populates="owner", cascade="all, delete")
+    events: Mapped[List["Event"]] = relationship(
+        back_populates="user", cascade="all, delete"
+    )
 
 
 class Event(Base):
@@ -36,13 +44,13 @@ class Event(Base):
 
     __tablename__ = "events"
 
-    id = Column(Integer, primary_key=True, index=True)
-    event_name = Column(String, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    event_name: Mapped[str] = mapped_column(index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    owner = relationship("User", back_populates="events")
-    occurrences = relationship(
-        "EventOccurrence", back_populates="event", cascade="all, delete"
+    user: Mapped["User"] = relationship(back_populates="events")
+    occurrences: Mapped["EventOccurrence"] = relationship(
+        back_populates="event", cascade="all, delete"
     )
 
 
@@ -51,8 +59,8 @@ class EventOccurrence(Base):
 
     __tablename__ = "event_occurrences"
 
-    id = Column(Integer, primary_key=True, index=True)
-    event_id = Column(Integer, ForeignKey("events.id"))
-    timestamp = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
+    timestamp: Mapped[datetime] = mapped_column(default=func.now())
 
-    event = relationship("Event", back_populates="occurrences")
+    event: Mapped["Event"] = relationship(back_populates="occurrences")
