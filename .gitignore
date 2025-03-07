@@ -363,3 +363,11 @@ $RECYCLE.BIN/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/python,swift,xcode,visualstudiocode,windows,macos,linux
+
+# Any of my temporary stuff
+temp.py
+
+# DB files
+alembic/
+alembic.ini
+*.db
