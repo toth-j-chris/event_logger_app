@@ -368,6 +368,5 @@ $RECYCLE.BIN/
 temp.py
 
 # DB files
-alembic/
-alembic.ini
+*/alembic/versions/
 *.db
